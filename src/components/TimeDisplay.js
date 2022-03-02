@@ -1,11 +1,54 @@
 import React, { useState, useRef, useEffect } from 'react'
 import Button from "./Button"
 const TimeDisplay = () => {
-  const Ref = useRef(null);
+  const intervalId = useRef(null);
   const [pause, setPause] = useState(false);
   const pauseRef = useRef();
   const [timeDisplay, setTimeDisplay] = useState('00:00:00');
+  const pomoCount = useRef(8);
+  const onBreak = useRef(true);
+  const shortBreak = useRef(1)
+  const longBreak = useRef(3)
+  const pomoSprint = useRef(2)
   
+
+
+  const handlePomoCycles = () => {
+    pomoCount.current -= 1
+
+    //longBreak
+    if (pomoCount.current <= 0){
+      pomoCount.current = 8
+      console.log("On Long Break")
+      handleInterval(getDeadlineTime(longBreak.current))
+    //pomoSprint or shortBreak
+    }else {
+      if(onBreak.current){
+        console.log("On Short Break")
+        handleInterval(getDeadlineTime(shortBreak.current))
+      }else{
+        console.log("On Pomo Sprint")
+        handleInterval(getDeadlineTime(pomoSprint.current))
+      }
+    }
+  }
+
+  const switchCycles = () => {
+    onBreak.current = !onBreak.current;
+    handlePomoCycles();
+  }
+
+  const handleInterval = (deadline) =>{
+    if (intervalId.current) clearInterval(intervalId.current);
+    const id = setInterval(() => {
+      pauseRef.current() ? deadline.setSeconds(deadline.getSeconds() + 1) : decrementTimer(deadline)
+        console.log(pause)
+    }, 1000)
+    intervalId.current = id;
+  }
+
+
+  // --------------------------------------------------------------------------
   const getTimeRemaining = (deadline) => {
     const total = Date.parse(deadline) - Date.parse(new Date());
     const seconds = Math.floor((total / 1000) % 60);
@@ -25,22 +68,13 @@ const TimeDisplay = () => {
             (minutes > 9 ? minutes : '0' + minutes) + ':'
             + (seconds > 9 ? seconds : '0' + seconds)
         )
+    }else {
+      switchCycles()
     }
   }
 
-  const setTimer = (deadline) => {
-  
-    setTimeDisplay('00:25:00');
+  // --------------------------------------------------------------------------
 
-    
-    if (Ref.current) clearInterval(Ref.current);
-    const id = setInterval(() => {
-      pauseRef.current() ? deadline.setSeconds(deadline.getSeconds() + 1) : decrementTimer(deadline)
-        console.log(pause)
-        console.log(deadline)
-    }, 1000)
-    Ref.current = id;
-  }
 
   const getDeadlineTime = (minutes) => {
       let deadline = new Date();
@@ -50,6 +84,9 @@ const TimeDisplay = () => {
       return deadline;
   }
 
+
+
+  //------------------------------------------------------------------------------
   function callback() {
     return pause;
   }
@@ -58,18 +95,20 @@ const TimeDisplay = () => {
     pauseRef.current = callback;
   });
 
+  //------------------------------------------------------------------------------
+
+
   // First Entrance to Timer
   useEffect(() => {
-    // function checkPause(){
-    //   pauseRef.current();
-    // }
-    setTimer(getDeadlineTime(25));
+    switchCycles()
   }, []);
+
+
 
 
   //Reset Button
   const onClickReset = () => {
-      setTimer(getDeadlineTime(25));
+    switchCycles()
   }
 
   

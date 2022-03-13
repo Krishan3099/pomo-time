@@ -8,7 +8,10 @@
     "@testing-library/user-event": "^13.5.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
+    "react-icons": "^4.3.1",
     "react-scripts": "5.0.0",
+    "react-spinkit": "^3.0.0",
+    "react-spring": "^9.4.3",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
@@ -35,5 +38,5 @@
       "last 1 safari version"
     ]
   },
-  "proxy":"https://api.deezer.com"
+  "proxy": "https://api.deezer.com"
 }

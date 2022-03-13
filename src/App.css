@@ -10,9 +10,44 @@
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  background-color: #D95550;
+  background-color: #FF6962;
 }
 
+.App.forward{
+  background-color: #5FA777;
+  animation: myanimation 120s;
+}
+
+.App.reverse{
+  background-color: #FF6962;
+  animation: myanimationreverse 60s;
+}
+
+.App.long-reverse{
+  background-color: #FF6962;
+  animation: myanimationreverse 180s;
+}
+
+
+.App.paused{
+  animation-play-state: paused;
+}
+
+@keyframes myanimation {
+  0% {background-color: #FF6962;}
+  25%{background-color:#FF8989;}
+  50%{background-color:#FFB3A5;}
+  75%{background-color:#7ABD91;}
+  100% {background-color: #5FA777;}
+}
+
+@keyframes myanimationreverse {
+  0% {background-color: #5FA777;}
+  25%{background-color:#7ABD91;}
+  50%{background-color:#FFB3A5;}
+  75%{background-color:#FF8989;}
+  100% {background-color: #D95550;}
+}
 
 
 
@@ -21,13 +56,18 @@
 
 nav {
   display: flex;
-  background-color: rgba(255, 255, 255, 30%);
-  min-height: 50px;
+  background-color: rgba(255, 255, 255, 20%);
+  min-height: 40px;
   justify-content: center;
   align-items: center;
+  border-bottom-left-radius: 2rem;
+  border-bottom-right-radius: 2rem;
+  align-self: center;
+  width: 95rem;
 }
 
 nav h3 {
+  font-family: 'Roboto', sans-serif;
   color: white;
 }
 
@@ -46,11 +86,13 @@ main {
 
 .task-area {
   display: flex;
+  flex-direction: row;
   justify-content: center;
   align-items: center;
-  transition: flex-basis 1s, width 1s;
-  flex-basis: 15rem;
-  width: 40rem;
+  transform: translateX(0);
+  transition: all 1s;
+  flex-basis: 40rem;
+  width: 15rem;
   background-color: rgba(255, 255, 255, 30%);
   border-radius: 1rem;
 }
@@ -58,6 +100,8 @@ main {
 .task-area.timer-area {
   flex-direction: column;
   justify-content: space-evenly;
+  -webkit-transform: translateX(-20rm);
+  transform: translateX(-20rm);
   flex-basis: 30rem;
   width: 25rem;
 }
@@ -70,6 +114,8 @@ main {
   flex-direction: column;
   width: 100%;
 }
+
+
 
 .form__label {
   font-family: 'Roboto', sans-serif;
@@ -100,6 +146,12 @@ main {
   transition: all 0.3s;
 }
 
+.form-control{
+  flex-grow: 1;
+}
+
+
+
 .task-input:placeholder-shown + .form__label {
   opacity: 0;
   visibility: hidden;
@@ -108,6 +160,16 @@ main {
 }
 
 
+.btn.btn-submit-2{
+  font-family: "JetBrains Mono",monospace;
+  font-weight:bold;
+  justify-content: center;
+  height: 48px;
+  width: 20%;
+  margin-left: 1rem;
+  margin-top: 0;
+  font-size: 15px;
+}
 
 
 /* CSS */
@@ -166,6 +228,95 @@ main {
 /*        Pomo Timer Area          */
 /* ------------------------------------------ */
 
+
+.timer-task-area{
+  display: flex;
+  width: 100vw;
+  flex-basis: 30rem;
+  flex-direction: row;
+  justify-content:space-evenly;
+}
+
+.task-list{
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  align-self: flex-start;
+  flex-basis: 30rem;
+  width: 35rem;
+}
+
+.list-background{
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  align-self: center;
+  background-color: rgba(255, 255, 255, 30%);
+  border-radius: 1rem;
+  width: 35rem;
+  transition: all 1s;
+}
+
+.add-form-2{
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.task-input-2 {
+  /* box-shadow: rgba(45, 35, 66, 0.4) 0 2px 4px; */
+  font-family: 'Roboto', sans-serif;
+  color: white;
+  font-size: 1rem;
+	margin: 0 0;
+  padding: .8rem 2rem;
+  border-top-left-radius: 0.5rem;
+  border-top-right-radius: 0.5rem;
+  background-color: rgb(255, 255, 255,0%);
+  border-style: none none solid none;
+  width: 100%;
+  display: block;
+  border-bottom: 0.1rem solid white;
+  background-color: rgba(45, 35, 66, 0);
+  transition: background-color .2s;
+  
+}
+
+.task-input-2:focus{
+  outline: none;
+  background-color: rgba(45, 35, 66, 0.05);
+}
+
+.task{
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+  padding-top: .2rem;
+  padding-bottom: .2rem;
+  /* margin-bottom: .2rem; */
+}
+
+.checkbox{
+  margin-right: 2rem;
+  margin-left: 2rem;
+}
+
+.task-text{
+  display: inline;
+  font-family: 'Roboto', sans-serif;
+  color: white;
+  font-weight: lighter;
+  font-size: 15px;
+  
+}
+
+
 .time {
   font-family: 'Roboto', sans-serif;
   font-size: 70px;
@@ -215,6 +366,8 @@ main {
   font-size: 30px;
 }
 
+
+
 .btn:focus {
   box-shadow: #D6D6E7 0 0 0 1.5px inset, rgba(45, 35, 66, 0.4) 0 2px 4px, rgba(45, 35, 66, 0.3) 0 7px 13px -3px, #D6D6E7 0 -3px 0 inset;
 }
@@ -238,15 +391,19 @@ main {
   flex-basis: 12rem;
   width: 35rem;
   
-  border-radius: 1rem;
+  /* border-radius: 1rem; */
   justify-content: center;
   align-items: center;
 }
 
 .music-player{
   box-shadow: rgba(45, 35, 66, 0.4) 0 2px 4px,rgba(45, 35, 66, 0.3) 0 7px 13px -3px,#D6D6E7 0 -0px 0 inset;
+  border-radius: 12px;
 }
 
+.loading{
+  position: absolute;
+}
 
 
 /* Footer Stuff */
@@ -254,12 +411,17 @@ main {
 
 footer {
   display: flex;
-  background-color: rgba(255, 255, 255, 30%);
-  min-height: 50px;
+  background-color: rgba(255, 255, 255, 20%);
+  min-height: 40px;
   justify-content: center;
   align-items: center;
+  border-top-left-radius: 2rem;
+  border-top-right-radius: 2rem;
+  align-self: center;
+  width: 95rem;
 }
 
 footer h4 {
+  font-family: 'Roboto', sans-serif;
   color: white;
 }

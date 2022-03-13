@@ -2,54 +2,91 @@ import './App.css';
 import Nav from './components/Nav';
 import Footer from './components/Footer';
 import TimeDisplay from './components/TimeDisplay';
-import Button from './components/Button';
+import Tasks from './components/Tasks';
 import SetTask from './components/SetTask';
-import { useRef, useEffect, useState } from 'react';
+import { useRef, useState } from 'react';
+import { useTransition, animated} from 'react-spring';
+import AddTask from './components/AddTask';
+import Spinner from 'react-spinkit';
+import PomoDirections from './components/PomoDirections';
 
 function App() {
   const [timerShown, setTimerShown] = useState(false)
+  const player = useRef()
   const timerAreaDiv = useRef();
-  const [player, setPlayer] = useState('<h1>Music Player</h1>')
+  const appRef = useRef();
+  const [loadingPlayer, setLoadingPlayer] = useState(true)
+  const tasksTransition = useTransition(timerShown,{
+    from: {transform: 'scale(1.1)', opacity: 0},
+    enter: {transform: 'scale(1)', opacity:1},
+    leave: {transform: 'scale(0.9)', y: -900, opacity:0},
+  });
+
+  const [tasks, setTasks] = useState([])
+
+
+  const finishedTask = (id) => {
+    console.log('delete', id)
+    setTasks(tasks.filter((task) => task.id !== id))
+  }
+
+  const addTask = (taskText) => {
+    const newId = tasks.length + 1
+    const newTask = {id: newId, text : taskText}
+    setTasks([...tasks, newTask])
+  }
 
   const changeTimerArea = () =>{
     timerAreaDiv.current.classList.toggle('timer-area')
     setTimerShown(!timerShown)
   }
 
-  // useEffect(() =>{
-  //   const getPlayer = async () => {
-  //     const htmlEmbed = await fetchDeezer()
-  //     setPlayer(htmlEmbed)
-  //   }
-
-  //   getPlayer()
-  // },[])
-
-  // const fetchDeezer = async () =>{
-  //   const response = await fetch('https://cors-anywhere.herokuapp.com/https://api.deezer.com/oembed?url=https://www.deezer.com/album/302127&maxwidth=700&maxheight=300&tracklist=true&format=json')
-  //   console.log(response)
-  //   const htmlFormat = await response.json().html
-  //   console.log(htmlFormat)
-  //   return htmlFormat
-  // }
-
-  // const createMarkup = (html) => {
-  //   return {__html: html};
-  // }
+  const hideSpinner = () => {
+    setLoadingPlayer(false)
+    player.current.classList.add('music-player');
+  }
   
   return (
-    <div className="App">
+    <div ref={appRef} className="App">
       <Nav/>
       <main>
-        <div ref={timerAreaDiv} className='task-area'>
-          {timerShown ?
-          <TimeDisplay/>
-          :
-          <SetTask onSub ={changeTimerArea}/>
-          }
+        <div className='timer-task-area'>
+          <div ref={timerAreaDiv} className='task-area'>
+            {timerShown ?          
+            <TimeDisplay appRef={appRef}/>
+            :
+            <>
+            <SetTask onSub ={changeTimerArea} onAdd={addTask}/>
+            
+            </>     
+            }
+            
+          </div>
+          <div className='task-list'>
+         
+          {tasksTransition((style1, item) => 
+            item ? <animated.div className='item' style={style1}>
+              <AddTask onAdd={addTask}/>
+              <Tasks onDelete={finishedTask} tasks={tasks} />
+            </animated.div> : 
+            <animated.div className='item' style={style1}>
+              <PomoDirections/>
+            </animated.div>
+          )}
+          </div>
+
         </div>
         <div className='music-area'>
-        <iframe className='music-player' title='spotify-widget' style={{"border-radius":"12px"}} src="https://open.spotify.com/embed/playlist/471N195f5jAVs086lzYglw?utm_source=generator&theme=0" width="90%" height="200" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe>
+        {loadingPlayer ? (
+          <Spinner
+            className="loading text-center"
+            name="three-bounce"
+            color="white"
+            fadeIn="none"
+          />
+        ) : null}
+        <iframe ref={player} onLoad={hideSpinner} title='spotify-widget' src="https://open.spotify.com/embed/playlist/471N195f5jAVs086lzYglw?utm_source=generator&theme=0" width="90%" height="200" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe>
+        
         </div>
         {/* <TimeDisplay/> */}
       </main>

@@ -1,6 +1,6 @@
 import { useState } from "react"
 
-const SetTask = ({onSub}) => {
+const SetTask = ({onSub, onAdd}) => {
   const [text, setText] = useState('')
 
   const onSubmit = (e) => {
@@ -11,8 +11,8 @@ const SetTask = ({onSub}) => {
     }
 
     onSub()
-
-    // setText('')
+    onAdd(text)
+    setText('')
   }
 
   return (

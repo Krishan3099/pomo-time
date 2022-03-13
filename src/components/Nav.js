@@ -1,7 +1,9 @@
+import {GiTomato} from 'react-icons/gi'
+
 const Nav = () => {
   return (
     <nav>
-        <h3>Pomo Time</h3>
+        <h3><GiTomato/> Pomo Time</h3>
     </nav>
   )
 }

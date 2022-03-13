@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react'
 import Button from "./Button"
-const TimeDisplay = () => {
+
+const TimeDisplay = ({appRef}) => {
   const intervalId = useRef(null);
   const [pause, setPause] = useState(false);
   const pauseRef = useRef();
@@ -21,14 +22,21 @@ const TimeDisplay = () => {
       pomoCount.current = 8
       console.log("On Long Break")
       handleInterval(getDeadlineTime(longBreak.current))
+        appRef.current.classList.remove('foward')
+        appRef.current.classList.add('long-reverse')
     //pomoSprint or shortBreak
     }else {
       if(onBreak.current){
         console.log("On Short Break")
         handleInterval(getDeadlineTime(shortBreak.current))
+        appRef.current.classList.remove('forward')
+        appRef.current.classList.add('reverse')
       }else{
         console.log("On Pomo Sprint")
         handleInterval(getDeadlineTime(pomoSprint.current))
+        appRef.current.classList.contains('reverse') && appRef.current.classList.remove('reverse')
+        appRef.current.classList.contains('long-reverse') && appRef.current.classList.remove('long-reverse')
+        appRef.current.classList.add('forward')
       }
     }
   }
@@ -41,8 +49,13 @@ const TimeDisplay = () => {
   const handleInterval = (deadline) =>{
     if (intervalId.current) clearInterval(intervalId.current);
     const id = setInterval(() => {
-      pauseRef.current() ? deadline.setSeconds(deadline.getSeconds() + 1) : decrementTimer(deadline)
-        console.log(pause)
+      if(pauseRef.current()){
+        deadline.setSeconds(deadline.getSeconds() + 1)
+        !appRef.current.classList.contains('paused') && appRef.current.classList.add('paused')
+      }else{
+        decrementTimer(deadline)
+        appRef.current.classList.contains('paused') && appRef.current.classList.remove('paused')
+      }
     }, 1000)
     intervalId.current = id;
   }
@@ -60,13 +73,12 @@ const TimeDisplay = () => {
   }
 
   const decrementTimer = (deadline) => {
-    let { total, hours, minutes, seconds } 
-                = getTimeRemaining(deadline);
+    let { total, hours, minutes, seconds } = getTimeRemaining(deadline);
     if (total >= 0) {
         setTimeDisplay(
             (hours > 9 ? hours : '0' + hours) + ':' +
-            (minutes > 9 ? minutes : '0' + minutes) + ':'
-            + (seconds > 9 ? seconds : '0' + seconds)
+            (minutes > 9 ? minutes : '0' + minutes) + ':' + 
+            (seconds > 9 ? seconds : '0' + seconds)
         )
     }else {
       switchCycles()
@@ -87,6 +99,7 @@ const TimeDisplay = () => {
 
 
   //------------------------------------------------------------------------------
+  //Handle Pause/Resume Helpers
   function callback() {
     return pause;
   }
@@ -95,23 +108,22 @@ const TimeDisplay = () => {
     pauseRef.current = callback;
   });
 
+
+
+   //Handle Reset
+   const onClickReset = () => {
+    switchCycles()
+  }
+
   //------------------------------------------------------------------------------
 
 
   // First Entrance to Timer
   useEffect(() => {
     switchCycles()
+    appRef.current.classList.add('forward')
   }, []);
 
-
-
-
-  //Reset Button
-  const onClickReset = () => {
-    switchCycles()
-  }
-
-  
 
   return (
     <>

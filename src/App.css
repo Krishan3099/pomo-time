@@ -223,7 +223,27 @@ main {
   transform: translateY(2px);
 }
         
-/* 
+/*  Pomo Directions Area  */
+
+.directions{
+  font-family: 'Roboto', sans-serif;
+  color: white;
+  margin-top: 6rem;
+}
+
+.directions h3 {
+  margin-bottom: 1rem;
+}
+
+
+.directions ul {
+  list-style-type: none;
+}
+
+
+.directions li {
+  margin-bottom: .2rem;
+}
 
 /*        Pomo Timer Area          */
 /* ------------------------------------------ */

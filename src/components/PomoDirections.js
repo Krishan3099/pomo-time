@@ -2,7 +2,7 @@ import React from 'react'
 
 const PomoDirections = () => {
   return (
-    <div>
+    <div className='directions'>
         <h3>The Pomodoro® Core Process consists of 6 steps:</h3>
         <ul>
             <li>1. Choose a task you'd like to get done</li>

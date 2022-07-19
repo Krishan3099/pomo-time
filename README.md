@@ -1,4 +1,4 @@
-# Getting Started with Create React App
+# Pomo Time
 
 
 ![image](https://user-images.githubusercontent.com/40392381/179653612-afdb613a-f6e6-4684-b1d1-f2ef50ba7c2a.png)
